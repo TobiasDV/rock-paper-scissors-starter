@@ -4,38 +4,30 @@ import domain.Move;
 import domain.Result;
 import domain.Rules;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RockPaperScissors implements Rules {
     @Override
     public Result decide(Move mine, Move theirs) {
-        switch (mine) {
-            case ROCK:
-                switch (theirs) {
-                    case SCISSORS:
-                        return Result.WIN;
-                    case PAPER:
-                        return Result.LOSE;
-                }
-                break;
 
-            case PAPER:
-                switch (theirs) {
-                    case ROCK:
-                        return Result.WIN;
-                    case SCISSORS:
-                        return Result.LOSE;
-                }
-                break;
+        // Map for giving values to the moves
+        Map<Move, Integer> moveValues = new HashMap<>();
+        moveValues.put(Move.ROCK, 0);
+        moveValues.put(Move.SCISSORS, 1);
+        moveValues.put(Move.PAPER, 2);
 
-            case SCISSORS:
-                switch (theirs) {
-                    case PAPER:
-                        return Result.WIN;
-                    case ROCK:
-                        return Result.LOSE;
-                }
-                break;
+        // Sorry, i couldn't think of another way to prevent this from failing
+        if(mine == Move.PAPER && theirs == Move.ROCK) return Result.WIN;
+
+        // Check for win
+        if(moveValues.get(mine) == moveValues.get(theirs) - 1) {
+            return Result.WIN;
+        // Check for draws
+        }else if(moveValues.get(mine).equals(moveValues.get(theirs))) {
+            return Result.DRAW;
         }
 
-        return Result.DRAW;
+        return Result.LOSE;
     }
 }
